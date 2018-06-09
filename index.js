@@ -36,13 +36,13 @@ try {
 catch (e) {
     console.log(e);
     app.usingGenericSensor = false;
-}/*INSERT ACCELEROMETER HERE*/
+}
 
 
 
 
 if (window.DeviceMotionEvent || 'LinearAccelerationSensor' in window) {
-    /*ADD AN EVENT LISTENER TO WINDOW*/
+window.addEventListener('devicemotion', deviceMotionHandler, false);
     
 }
 else {
@@ -100,7 +100,10 @@ function deviceMotionHandler(eventData) {
     if (!app.busy) {
         if (Math.abs(mAcc.x) > shakyThreshold || Math.abs(mAcc.y) > shakyThreshold || Math.abs(mAcc.z) > shakyThreshold) {
             app.busy = true;
-            /*DO SILLY STUFF*/
+            var scream = new Audio(randomPicker(app.audio));
+            scream.play();
+            sleep(2000);
+
 
             app.busy = false;
         }
@@ -129,7 +132,6 @@ function randomPicker(array) {
     let i = Math.floor(Math.random() * array.length);
     return array[i];
 }
-
 
 function scream() {
     var scream = new Audio(randomPicker(app.audio));
