@@ -15,7 +15,28 @@ var app = {
     ]
 };
 
-/*INSERT ACCELEROMETER HERE*/
+try {
+    let sensor = new LinearAccelerationSensor({ frequency: 60 });
+    sensor.start();
+
+    sensor.onreading = () => {
+        var event = new CustomEvent('devicemotion', {
+            detail: {
+                acceleration: {
+                    x: sensor.x,
+                    y: sensor.y,
+                    z: sensor.z
+                }
+            }
+        });
+        window.dispatchEvent(event);
+    }
+    sensor.onerror = event => console.log(event.error.name, event.error.message);
+}
+catch (e) {
+    console.log(e);
+    app.usingGenericSensor = false;
+}/*INSERT ACCELEROMETER HERE*/
 
 
 
@@ -109,5 +130,10 @@ function randomPicker(array) {
     return array[i];
 }
 
-/* INSERT SCREAM FOR BUTTON CLICK FUNCTION HERE*/ 
+
+function scream() {
+    var scream = new Audio(randomPicker(app.audio));
+    scream.play();
+}
+
 
